@@ -9,8 +9,8 @@ This project helps in creating models to answer a few questions about payments u
 
 ## 2. Setup
 
-1. Install DBT Core and bigquery adapter using pip install dbt && pip install dbt-bigquery
-2. Update /Users/<username>/.dbt/profiles.yml to add the following information
+1. Install DBT Core and data platform adapter of your choice using `pip install dbt && pip install dbt-<data-platform>`. Here I am using bigquery for the analysis as it provides free sandbox environment.  [Reference](https://docs.getdbt.com/docs/core/connect-data-platform/about-core-connections)
+2. Update `/Users/<user-name>/.dbt/profiles.yml` to add the following information
 ```
 deel_dbt_project:
   outputs:
@@ -83,8 +83,11 @@ The model architecture is modular, with the following layers:
 ### 3.2 Lineage graphs
 
 ![Alt text](assets/lineage_graph.png)
+Follow the [setup steps](#2-setup) to serve the auto generated docs locally 
 
 ## 4. Part 2: Data Analysis
+
+Here I have used [Looker](https://cloud.google.com/looker/docs) for the visualization because of the same google environment
 
 ### 4.1. What is the acceptance rate over time?
 
