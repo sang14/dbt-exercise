@@ -1,0 +1,170 @@
+version: 2
+models:
+  - name: acceptance_report
+    description: Table that holds detailed informtation of the transactions.
+    columns:
+      - name: external_ref
+        description: This column is the Primary key / unique identifier of the table.
+        tests:
+          - unique
+          - not_null
+
+      - name: status
+
+      - name: source
+        description: Secure payment platform used to process the transaction.
+
+      - name: ref
+
+      - name: date_time
+        description: This column gives the timestamp of the transaction.
+
+      - name: state
+        description: This column tells us about the state of transaction whether the transaction was 'Accepted' or 'Declined'
+      
+      - name: cvv_provided
+      - name: amount
+        description: Total amount of the transaction
+
+      - name: country
+        description: Country of origin of the transaction
+
+      - name: currency
+        tests: 
+          - not_null
+          - accepted_values:
+              values: ['USD', 'CAD','EUR','MXN','GBP','AUD','SGD']
+
+      - name: rates
+        description: This is a key pair of currency and their exchange rate
+        
+  
+  - name: chargeback_report
+    description: The table contains information indicating whether a chargeback occurred for each transaction, with a chargeback flag associated with the transaction.
+    columns:
+      - name: external_ref
+        description: This column is the Primary key / unique identifier of the table.
+        tests:
+          - unique
+          - not_null
+
+      - name: status
+
+      - name: source
+        description: Secure payment platform used to process the transaction.
+
+      - name: chargeback
+        description: This flag indicates whether a chargeback occurred (True) or is missing (False).
+
+  - name: dim_currencies
+    description: Contains transaction data with exchange rates for various currencies
+    columns:
+      - name: external_ref
+        description: Unique external reference for the transaction
+        tests:
+          - not_null
+          - unique
+
+      - name: date_time
+        description: Timestamp of the transaction
+
+      - name: native_currency
+        description: Currency in which the transaction was made
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['USD', 'CAD', 'EUR', 'MXN', 'GBP', 'AUD', 'SGD']
+
+      - name: usd
+        description: Exchange rate for USD from the rates JSON
+
+      - name: cad
+        description: Exchange rate for CAD from the rates JSON
+
+      - name: eur
+        description: Exchange rate for EUR from the rates JSON
+
+      - name: mxn
+        description: Exchange rate for MXN from the rates JSON
+
+      - name: sgd
+        description: Exchange rate for SGD from the rates JSON
+
+      - name: aud
+        description: Exchange rate for AUD from the rates JSON
+
+      - name: gbp
+        description: Exchange rate for GBP from the rates JSON
+
+  - name: dim_transactions
+    description: Processed transactions with calculated USD amounts and chargeback information
+    columns:
+      - name: external_ref
+        description: Unique external reference for each transaction
+        tests:
+          - not_null
+          - unique
+
+      - name: status
+        description: Status of the transaction (e.g., successful, failed)
+
+      - name: source
+        description: Source of the transaction (e.g., card, bank)
+
+      - name: ref
+        description: Reference identifier associated with the transaction
+
+      - name: date_time
+        description: Timestamp of the transaction
+
+      - name: transaction_status
+        description: Status of the transaction (e.g., completed, pending, reversed)
+
+      - name: chargeback
+        description: Indicates whether a chargeback occurred (True or False)
+
+      - name: cvv_provided
+        description: Indicates whether the CVV was provided during the transaction
+
+      - name: native_amount
+        description: Transaction amount in the native currency
+
+      - name: native_currency
+        description: Currency in which the transaction occurred
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['USD', 'CAD', 'EUR', 'MXN', 'GBP', 'AUD', 'SGD']
+
+      - name: country
+        description: Country where the transaction originated
+
+      - name: amount_usd
+        description: Transaction amount converted to USD
+
+
+macros:
+  - name: calculate_amount_in_usd
+    description: >
+      A macro to calculate the equivalent amount in USD for a given `native_currency` and `native_amount` 
+      using exchange rates extracted from a JSON object.
+    arguments:
+      - name: currency
+        description: The column name or value representing the native currency (e.g., 'USD', 'CAD').
+        type: string
+
+      - name: amount
+        description: The column name or value representing the native amount to be converted to USD.
+        type: numeric
+
+    tests:
+      - assert_valid_conversion_logic:
+          description: >
+            Validates that the macro applies the correct conversion logic for each currency.
+            This includes using the appropriate JSON exchange rate key for each currency.
+
+      - ensure_default_case:
+          description: >
+            Confirms that the macro includes a default case to handle unsupported currencies, 
+            ensuring robustness in calculations.
+ 
