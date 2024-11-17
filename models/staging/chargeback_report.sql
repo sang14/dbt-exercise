@@ -1,5 +1,9 @@
+/**
+Loading chargeback data into the staging from seeds.
+*/
+
 WITH chargeback_report AS (
-    SELECT DISTINCT
+    SELECT
        *
     FROM {{ ref('Globepay_Chargeback_Report') }}
 )

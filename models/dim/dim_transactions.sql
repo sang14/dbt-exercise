@@ -1,3 +1,7 @@
+/** 
+Calculates the USD equivalent for transactions and retrieves all relevant transaction details.
+**/
+
 with final as (
 
     select 

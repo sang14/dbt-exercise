@@ -1,7 +1,11 @@
-WITH chargeback_report AS (
-    SELECT DISTINCT
+/**
+Loading acceptance data into the staging from seeds.
+*/
+
+WITH acceptance_report AS (
+    SELECT
        *
     FROM {{ ref('Globepay_Acceptance_Report') }}
 )
 
-SELECT * FROM chargeback_report
+SELECT * FROM acceptance_report

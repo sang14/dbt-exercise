@@ -1,3 +1,7 @@
+/**
+Retrieves countries with declined transactions where the total USD amount exceeds 25 million.
+**/
+
 select 
 country,
 sum(amount_usd) usd_amount

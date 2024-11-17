@@ -1,3 +1,8 @@
+/**
+creating a table that holds the data for exchange rate for every transaction 
+and the native currency used in that specific transaction. 
+*/
+
 with final as (
     
     SELECT

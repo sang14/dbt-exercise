@@ -1,3 +1,8 @@
+/**
+Performing an inner join on the Acceptance and Chargeback reports, 
+including all columns from both tables, while ensuring that duplicate columns are included only once.
+*/
+
 with final as (
     select 
     acc.external_ref,

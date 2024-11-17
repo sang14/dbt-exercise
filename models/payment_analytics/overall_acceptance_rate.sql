@@ -1,3 +1,7 @@
+/**
+acceptance rate = total accepted transactions / overall transactions (In percentage)
+**/
+
 with accept as 
 (select 
 EXTRACT(DATE FROM date_time) date_s,
